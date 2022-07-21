@@ -1,11 +1,11 @@
-const url = "https://league-of-legends-champions.p.rapidapi.com/champions/en-us/fiddlesticks";
-const settings = {
-    method: "GET",
-    headers: {
-        "X-RapidAPI-Key": "9afec6f9acmsh881e1788037bc49p1f7eb5jsn63030a9dfcbe",
-        "X-RapidAPI-Host": "league-of-legends-champions.p.rapidapi.com",
-    }
-}
+//const url = "https://league-of-legends-champions.p.rapidapi.com/champions/en-us/morgana"; // this api has too low of a hard limit :(
+//const settings = {
+//    method: "GET",
+//    headers: {
+//        "X-RapidAPI-Key": "9afec6f9acmsh881e1788037bc49p1f7eb5jsn63030a9dfcbe",
+//        "X-RapidAPI-Host": "league-of-legends-champions.p.rapidapi.com",
+//    }
+//}
 
 // DOM manipulation
 const championName = document.getElementById("champion-name");
@@ -35,12 +35,34 @@ const championDescription = document.getElementById("champion-description");
 // ex. fetch().then().then().catch();
 
 // putting it all together
-fetch(url, settings) //grabs information from our API
-.then((response) => { return response.json(); }) // transforms our response into JSON
-.then((response) => { 
-    let champ = response.champion[0];
-    console.log(champ);
-    championName.innerText = champ.champion_name;
-    championImage.src = champ.champion_icon;
-    championDescription.innerText = champ.champion_blurb;
-}); // performs an action on our JSON object
+//fetch(url, settings) //grabs information from our API
+//.then((response) => { return response.json(); }) // transforms our response into JSON
+//.then((response) => { 
+//    let champ = response.champion[0];
+//    console.log(champ);
+//    championName.innerText = champ.champion_name;
+//    championImage.src = champ.champion_icon;
+//    championDescription.innerText = champ.champion_blurb;
+//}); // performs an action on our JSON object
+
+// we press a button
+const submitBtn = document.getElementById("submit");
+submitBtn.addEventListener("click", FetchNaut);
+
+function FetchNaut(){
+    // the button grabs the info from our text field
+    let champInput = document.getElementById("champ-input");
+    let userInput = champInput.value.toLowerCase().replace(" ", "");
+    console.log(userInput);
+    // put that information in our URL 
+    const url = `https://awesomenauts-api.herokuapp.com/naut/${userInput}`; // put string inside of tick marks ``, and then insert variables using ${varName}
+    // run the api call
+    fetch(url)
+        .then((response) => {return response.json()})
+        .then((response) => { 
+            championName.innerText = response.name;
+            championDescription.innerText = response.description;
+            championImage.src = response.image_url;
+         })
+        .catch((err) => {console.log(err)});
+}
